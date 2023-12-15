@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { initialData } from "@/seed/seed";
 import { titleFont } from "@/config/fonts";
 import { SizeSelector } from "@/components";
+import { QuantitySelector } from "@/components/product/quantity-selector/QuantitySelector";
 
 interface Props {
   params: {
@@ -39,6 +40,10 @@ export default function ProductPage({ params }: Props) {
         />
 
         {/* Amount Selector */}
+        <QuantitySelector
+          quantity={2}
+          // maxQuantity={product.quantity}
+        />
 
         {/* Button */}
         <button className="btn-primary my-5">
