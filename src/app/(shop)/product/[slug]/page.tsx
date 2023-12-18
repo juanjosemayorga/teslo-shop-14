@@ -4,6 +4,7 @@ import { titleFont } from "@/config/fonts";
 import { SizeSelector } from "@/components";
 import { QuantitySelector } from "@/components/product/quantity-selector/QuantitySelector";
 import { ProductSlideShow } from '../../../../components/product/slide-show/ProductSlideShow';
+import { ProductMobileSlideshow } from '../../../../components/product/slide-show/ProductMobileSlideshow';
 
 interface Props {
   params: {
@@ -22,11 +23,20 @@ export default function ProductPage({ params }: Props) {
   return (
     <div className="mt-5 mb-20 grid md:grid-cols-3 gap-3">
 
-      {/* SlideShow */}
+
       <div className="col-span-1 md:col-span-2">
+        {/* MobileSlideShow */}
+        <ProductMobileSlideshow
+          title={product.title}
+          images={product.images}
+          className="block md:hidden"
+        />
+
+        {/* Desktop SlideShow */}
         <ProductSlideShow
           title={product.title}
           images={product.images}
+          className="hidden md:block"
         />
       </div>
 
