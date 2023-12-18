@@ -3,6 +3,7 @@ import { initialData } from "@/seed/seed";
 import { titleFont } from "@/config/fonts";
 import { SizeSelector } from "@/components";
 import { QuantitySelector } from "@/components/product/quantity-selector/QuantitySelector";
+import { ProductSlideShow } from '../../../../components/product/slide-show/ProductSlideShow';
 
 interface Props {
   params: {
@@ -23,7 +24,10 @@ export default function ProductPage({ params }: Props) {
 
       {/* SlideShow */}
       <div className="col-span-1 md:col-span-2">
-        <h3>Hello World</h3>
+        <ProductSlideShow
+          title={product.title}
+          images={product.images}
+        />
       </div>
 
       {/* Details */}
