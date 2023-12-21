@@ -6,6 +6,7 @@ export * from './product/size-selector/SizeSelector'
 export * from './product/slide-show/ProductMobileSlideshow'
 export * from './product/slide-show/ProductMobileSlideshow'
 export * from './product/slide-show/ProductSlideShow'
+export * from './ui/footer/Footer'
 
 export * from './ui/not-found/PageNotFound'
 export * from './ui/sidebar/Sidebar'
