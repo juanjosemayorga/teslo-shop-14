@@ -17,7 +17,13 @@ npm install
 docker-compose up -d
 ```
 
-5. Run the project
+5. Run the migrations
+
+```
+npx prisma migrate dev
+```
+
+6. Run the project
 
 ```
 npm run dev
