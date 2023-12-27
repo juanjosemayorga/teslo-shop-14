@@ -23,6 +23,12 @@ docker-compose up -d
 npx prisma migrate dev
 ```
 
+6. Execute the seed
+
+```
+npm run seed
+```
+
 6. Run the project
 
 ```
