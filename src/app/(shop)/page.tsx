@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 
-import { Pagination, ProductGrid, Title } from '@/components'
+import { ProductGrid, Title } from '@/components'
 import { getPaginatedProductsWithImages } from '@/actions';
+import { Pagination } from '../../components/ui/pagination/Pagination';
 
 interface Props {
   searchParams: {
