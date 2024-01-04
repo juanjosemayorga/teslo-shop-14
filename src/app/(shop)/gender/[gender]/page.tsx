@@ -1,3 +1,5 @@
+export const revalidate = 60; // 1 minute
+
 import { notFound, redirect } from "next/navigation";
 import { getPaginatedProductsWithImages } from "@/actions";
 import { Pagination } from '../../../../components/ui/pagination/Pagination';
