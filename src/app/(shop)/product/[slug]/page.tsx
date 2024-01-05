@@ -6,7 +6,8 @@ import { SizeSelector } from "@/components";
 import { QuantitySelector } from "@/components/product/quantity-selector/QuantitySelector";
 import { ProductSlideShow } from '../../../../components/product/slide-show/ProductSlideShow';
 import { ProductMobileSlideshow } from '../../../../components/product/slide-show/ProductMobileSlideshow';
-import { getProductBySlug } from "@/actions";
+import { getProductBySlug, getStockBySlug } from "@/actions";
+import { StockLabel } from '../../../../components/product/stock-label/StockLabel';
 
 interface Props {
   params: {
@@ -24,7 +25,6 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <div className="mt-5 mb-20 grid md:grid-cols-3 gap-3">
-
 
       <div className="col-span-1 md:col-span-2">
         {/* MobileSlideShow */}
@@ -44,6 +44,8 @@ export default async function ProductPage({ params }: Props) {
 
       {/* Details */}
       <div className="col-span-1 px-5">
+        <StockLabel slug={slug} />
+
         <h1 className={`${titleFont.className} antialiased font-bold text-xl`}>
           {product.title}
         </h1>
