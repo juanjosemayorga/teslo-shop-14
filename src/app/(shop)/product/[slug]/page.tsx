@@ -7,8 +7,9 @@ import { SizeSelector } from "@/components";
 import { QuantitySelector } from "@/components/product/quantity-selector/QuantitySelector";
 import { ProductSlideShow } from '../../../../components/product/slide-show/ProductSlideShow';
 import { ProductMobileSlideshow } from '../../../../components/product/slide-show/ProductMobileSlideshow';
-import { getProductBySlug, getStockBySlug } from "@/actions";
+import { getProductBySlug } from "@/actions";
 import { StockLabel } from '../../../../components/product/stock-label/StockLabel';
+import { AddToCart } from "./ui/AddToCart";
 
 interface Props {
   params: {
@@ -76,22 +77,7 @@ export default async function ProductPage({ params }: Props) {
         </h1>
         <p className="text-lg mb-5">{product.price}</p>
 
-        {/* Size Selector */}
-        <SizeSelector
-          selectedSize={product.sizes[0]}
-          availableSizes={product.sizes}
-        />
-
-        {/* Amount Selector */}
-        <QuantitySelector
-          quantity={2}
-          // maxQuantity={product.quantity}
-        />
-
-        {/* Button */}
-        <button className="btn-primary my-5">
-          Add to Cart
-        </button>
+        <AddToCart product={product} />
 
         {/* Description */}
         <h3 className="font-bold text-sm">Description</h3>
