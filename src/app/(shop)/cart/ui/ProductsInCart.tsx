@@ -5,10 +5,16 @@ import Image from "next/image";
 import { useCartStore } from "@/store";
 import { QuantitySelector } from "../../../../components/product/quantity-selector/QuantitySelector";
 import Link from "next/link";
+import { CartProduct } from "@/interfaces";
 
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
+  const updateProductQuantity = useCartStore(state => state.updateProductQuantity);
   const productsInCart = useCartStore(state => state.cart);
+
+  const handleQuantityChange = (product: CartProduct, quantity: number) => {
+    updateProductQuantity(product, quantity);
+  };
 
   useEffect(() => {
     setLoaded(true);
@@ -35,8 +41,8 @@ export const ProductsInCart = () => {
             </Link>
             <p>${product.price}</p>
             <QuantitySelector
-              quantity={3}
-              onQuantityChange={(quantity) => console.log(quantity)}
+              quantity={product.quantity}
+              onQuantityChange={(quantity) => handleQuantityChange(product, quantity)}
             />
 
             <button className="underline mt-3">Remove</button>
