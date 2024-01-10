@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -9,11 +9,17 @@ import { CartProduct } from "@/interfaces";
 
 export const ProductsInCart = () => {
   const [loaded, setLoaded] = useState<boolean>(false);
-  const updateProductQuantity = useCartStore(state => state.updateProductQuantity);
-  const productsInCart = useCartStore(state => state.cart);
+
+  const productsInCart = useCartStore((state) => state.cart);
+  const updateProductQuantity = useCartStore((state) => state.updateProductQuantity);
+  const removeProduct = useCartStore((state) => state.removeProduct);
 
   const handleQuantityChange = (product: CartProduct, quantity: number) => {
     updateProductQuantity(product, quantity);
+  };
+
+  const handleRemoveProduct = (product: CartProduct) => {
+    removeProduct(product);
   };
 
   useEffect(() => {
@@ -21,7 +27,7 @@ export const ProductsInCart = () => {
   }, []);
 
   if (!loaded) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
 
   return (
@@ -36,16 +42,26 @@ export const ProductsInCart = () => {
             className="mr-5 rounded"
           />
           <div>
-            <Link className="hover:underline cursor-pointer" href={`/product/${product.slug}`}>
+            <Link
+              className="hover:underline cursor-pointer"
+              href={`/product/${product.slug}`}
+            >
               {product.size} - {product.title}
             </Link>
             <p>${product.price}</p>
             <QuantitySelector
               quantity={product.quantity}
-              onQuantityChange={(quantity) => handleQuantityChange(product, quantity)}
+              onQuantityChange={(quantity) =>
+                handleQuantityChange(product, quantity)
+              }
             />
 
-            <button className="underline mt-3">Remove</button>
+            <button
+              className="underline mt-3"
+              onClick={() => handleRemoveProduct(product)}
+            >
+              Remove
+            </button>
           </div>
         </div>
       ))}
