@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/actions";
@@ -7,7 +9,16 @@ import { IoInformationOutline } from "react-icons/io5";
 import clsx from "clsx";
 
 export const LoginForm = () => {
+  const router = useRouter();
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
+
+  useEffect(() => {
+    if (errorMessage === 'Success') {
+      router.replace('/');
+    }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMessage]);
 
   return (
     <form action={dispatch} className="flex flex-col">
@@ -30,7 +41,7 @@ export const LoginForm = () => {
         aria-live="polite"
         aria-atomic="true"
       >
-        {errorMessage && (
+        {errorMessage === 'CredentialsSignin' && (
           <div className="flex flex-row mb-2">
             <IoInformationOutline className="h-5 w-5 text-red-500" />
             <p className="text-sm text-red-500">{errorMessage}</p>
