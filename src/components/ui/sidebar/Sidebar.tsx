@@ -1,10 +1,8 @@
 "use client";
 
-import { logout } from "@/actions";
-import { useUIStore } from "@/store";
 import clsx from "clsx";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import {
   IoCloseOutline,
   IoLogInOutline,
@@ -16,13 +14,16 @@ import {
   IoTicketOutline,
 } from "react-icons/io5";
 
+import { logout } from "@/actions";
+import { useUIStore } from "@/store";
+
 export const Sidebar = () => {
   const { data: session } = useSession();
 
-  console.log({ session });
-
   const isSideMenuOpen = useUIStore((state) => state.isSideMenuOpen);
   const closeSideMenu = useUIStore((state) => state.closeSideMenu);
+
+  const isAuthenticated = !!session?.user;
 
   const handleLogout = () => {
     logout();
@@ -86,22 +87,26 @@ export const Sidebar = () => {
           <span className="ml-3 text-xl">Orders</span>
         </Link>
 
-        <Link
-          href="/auth/login"
-          onClick={closeSideMenu}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogInOutline size={30} />
-          <span className="ml-3 text-xl">LogIn</span>
-        </Link>
+        {isAuthenticated && (
+          <button
+            className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            onClick={handleLogout}
+          >
+            <IoLogOutOutline size={30} />
+            <span className="ml-3 text-xl">LogOut</span>
+          </button>
+        )}
 
-        <button
-          className="flex w-full items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-          onClick={handleLogout}
-        >
-          <IoLogOutOutline size={30} />
-          <span className="ml-3 text-xl">LogOut</span>
-        </button>
+        {!isAuthenticated && (
+          <Link
+            href="/auth/login"
+            onClick={closeSideMenu}
+            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+          >
+            <IoLogInOutline size={30} />
+            <span className="ml-3 text-xl">LogIn</span>
+          </Link>
+        )}
 
         <div className="w-full h-px bg-gray-200 my-10" />
 
