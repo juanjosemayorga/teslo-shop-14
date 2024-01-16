@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import { authenticate } from "@/actions";
@@ -9,12 +8,11 @@ import { IoInformationOutline } from "react-icons/io5";
 import clsx from "clsx";
 
 export const LoginForm = () => {
-  const router = useRouter();
   const [errorMessage, dispatch] = useFormState(authenticate, undefined);
 
   useEffect(() => {
     if (errorMessage === 'Success') {
-      router.replace('/');
+      window.location.replace('/');
     }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
