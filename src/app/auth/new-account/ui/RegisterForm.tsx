@@ -1,7 +1,9 @@
 "use client";
 
+import { registerUser } from "@/actions";
 import clsx from "clsx";
 import Link from "next/link";
+import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 type FormInputs = {
@@ -11,22 +13,25 @@ type FormInputs = {
 };
 
 export const RegisterForm = () => {
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
   const onSubmit: SubmitHandler<FormInputs> = async (data: FormInputs) => {
+    setErrorMessage('');
+
     const { name, email, password } = data;
-    console.log({name, email, password});
+    const resp = await registerUser({ name, email, password });
+
+    if (!resp.ok) {
+      setErrorMessage(resp.message);
+      return;
+    }
+
+    console.log({ resp });
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col">
-
-      {/* {
-        errors?.name?.type === 'required' && (
-          <span className="text-red-500">Name is required</span>
-        )
-      } */}
-
       <label htmlFor="email">Full Name</label>
       <input
         className={
@@ -69,6 +74,12 @@ export const RegisterForm = () => {
         type="password"
         { ...register("password", { required: true, minLength: 6 })}
       />
+
+      {
+        errorMessage && (
+          <span className="text-red-500">{errorMessage}</span>
+        )
+      }
 
       <button className="btn-primary">Create account</button>
 
