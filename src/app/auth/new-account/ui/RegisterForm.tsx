@@ -1,10 +1,10 @@
 "use client";
 
-import { registerUser } from "@/actions";
-import clsx from "clsx";
-import Link from "next/link";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import clsx from "clsx";
+import Link from "next/link";
+import { login, registerUser } from "@/actions";
 
 type FormInputs = {
   name: string;
@@ -27,7 +27,8 @@ export const RegisterForm = () => {
       return;
     }
 
-    console.log({ resp });
+    await login({ email: email.toLowerCase(), password });
+    window.location.replace('/');
   }
 
   return (
