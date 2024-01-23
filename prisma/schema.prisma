@@ -69,3 +69,8 @@ model User {
   role Role @default(user)
   cart String?
 }
+
+model Country {
+  id String @id
+  name String
+}
