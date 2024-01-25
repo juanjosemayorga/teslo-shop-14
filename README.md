@@ -29,7 +29,9 @@ npx prisma migrate dev
 npm run seed
 ```
 
-6. Run the project
+7. To clean the LocalStorage of the browser
+
+8. Run the project
 
 ```
 npm run dev
