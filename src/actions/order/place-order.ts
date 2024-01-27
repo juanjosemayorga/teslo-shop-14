@@ -36,6 +36,24 @@ export const placeOrder = async (productIds: ProductToOrder[], address: Address)
   const itemsInOrder = productIds.reduce((acc, curr) => acc + curr.quantity, 0);
 
   // Totals of tax, subtotal and total
+  const { subTotal, tax, total } = productIds.reduce((acc, curr) => {
+    const productQuantity = curr.quantity;
+    const product = products.find(p => p.id === curr.productId);
+
+    if (!product) {
+      throw new Error(`Product with id ${curr.productId} not found`);
+    }
+
+    const subTotal = product.price * productQuantity;
+
+    acc.subTotal += subTotal;
+    acc.tax += subTotal * 0.15;
+    acc.total += subTotal * 1.15;
+
+    return acc;
+  }, { subTotal: 0, tax: 0, total: 0 });
+
+  // Create the transaction in the database
   
 
 };
