@@ -59,13 +59,43 @@ export const placeOrder = async (productIds: ProductToOrder[], address: Address)
     // 1. Update the stock of the products
 
     // 2. Create the order - Header - Details
+    const order = await tx.order.create({
+      data: {
+        userId,
+        itemsInOrder,
+        subTotal,
+        tax,
+        total,
+
+        OrderItem: {
+          createMany: {
+            data: productIds.map(p => ({
+              quantity: p.quantity,
+              size: p.size,
+              productId: p.productId,
+              price: products.find(pr => pr.id === p.productId)?.price ?? 0,
+            })),
+          },
+        }
+      }
+    });
+
+    // Check if the price is 0, if so, return an error
 
     // 3. Create the order address
+    const { country, ...restAddress } = address;
+    const orderAddress = await tx.orderAddress.create({
+      data: {
+        ...restAddress,
+        countryId: country,
+        orderId: order.id,
+      }
+    });
 
     return {
-      order: 123,
+      order,
       updatedProducts: [],
-      orderAddress: {},
+      orderAddress,
     }
   })
 
