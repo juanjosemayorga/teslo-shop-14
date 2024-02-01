@@ -1,7 +1,8 @@
 export * from './products/product-grid/ProductGrid'
 export * from './products/product-grid/ProductGridItem'
+export * from './paypal/PayPalButton'
 
-export * from './provider/Provider'
+export * from './providers/Providers'
 
 export * from './product/quantity-selector/QuantitySelector'
 export * from './product/size-selector/SizeSelector'
