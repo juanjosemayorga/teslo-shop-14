@@ -11,6 +11,8 @@ export * from './product/slide-show/ProductMobileSlideshow'
 export * from './product/slide-show/ProductSlideShow'
 export * from './product/stock-label/StockLabel'
 
+export * from './orders/order-status'
+
 export * from './ui/not-found/PageNotFound'
 export * from './ui/pagination/Pagination'
 export * from './ui/sidebar/Sidebar'
