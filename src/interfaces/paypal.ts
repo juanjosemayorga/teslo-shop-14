@@ -87,6 +87,7 @@ export interface PurchaseUnit {
   soft_descriptor: string;
   shipping:        Shipping;
   payments:        Payments;
+  invoice_id:      string;
 }
 
 export interface Amount {

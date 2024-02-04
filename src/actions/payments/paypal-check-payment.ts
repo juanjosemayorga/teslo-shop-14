@@ -1,6 +1,8 @@
 "use server";
 
 import { PayPalOrderStatusResponse } from "@/interfaces/paypal";
+import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 export const paypalCheckPayment = async (paypalTransactionId: string) => {
   const authToken = await getPayPalBearerToken();
@@ -22,7 +24,7 @@ export const paypalCheckPayment = async (paypalTransactionId: string) => {
   }
 
   const { status, purchase_units } = resp;
-  // const { amount } = purchase_units[0]; TODO:
+  const { invoice_id: orderId } = purchase_units[0];
 
   if (status !== "COMPLETED") {
     return {
@@ -31,7 +33,29 @@ export const paypalCheckPayment = async (paypalTransactionId: string) => {
     };
   }
 
-  // TODO: Make the update in the database
+  try {
+    await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        isPaid: true,
+        paidAt: new Date(),
+      },
+    });
+
+    revalidatePath(`/orders/${orderId}`)
+
+    return {
+      ok: true,
+      message: "Payment completed",
+    };
+  } catch (error) {
+    console.error("Error processing payment", error);
+
+    return {
+      ok: false,
+      message: "Error processing payment",
+    };
+  }
 
   console.log({ status, purchase_units });
 };
@@ -60,7 +84,10 @@ const getPayPalBearerToken = async (): Promise<string | null> => {
   };
 
   try {
-    const result = await fetch(oauth2url, requestOptions).then((response) =>
+    const result = await fetch(oauth2url, {
+      ...requestOptions,
+      cache: "no-store",
+    }).then((response) =>
       response.json()
     );
     return result.access_token;
@@ -88,7 +115,10 @@ const veryfyPayPalPayment = async (
   };
 
   try {
-    const result = await fetch(paypalOrderUrl, requestOptions).then((response) =>
+    const result = await fetch(paypalOrderUrl, {
+      ...requestOptions,
+      cache: "no-store",
+    }).then((response) =>
       response.json()
     );
 
