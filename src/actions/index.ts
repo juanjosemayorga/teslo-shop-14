@@ -8,6 +8,9 @@ export * from './auth/register';
 
 export * from './country/get-countries';
 
+export * from './user/get-paginated-users';
+export * from './user/change-user-role';
+
 export * from './order/get-order-by-id';
 export * from './order/get-orders-by-user';
 export * from './order/get-paginated-orders';
