@@ -3,6 +3,7 @@
 import { z } from 'zod';
 import { Gender, Product, Size } from '@prisma/client';
 import prisma from '@/lib/prisma';
+import { revalidatePath } from 'next/cache';
 
 const productSchema = z.object({
   id: z.string().uuid().optional().nullable(),
@@ -41,51 +42,64 @@ export const createUpdateProduct = async (formData: FormData) => {
 
   const { id, ...rest } = product;
 
-  const prismaTx = await prisma.$transaction(async(tx) => {
-    let product: Product;
-    const tagsArray = rest.tags.split(",").map((tag) => tag.trim().toLowerCase());
+  try {
+    const prismaTx = await prisma.$transaction(async(tx) => {
+      let product: Product;
+      const tagsArray = rest.tags.split(",").map((tag) => tag.trim().toLowerCase());
 
-    if (id) {
-      // Update
-      product = await prisma.product.update({
-        where: { id },
-        data: {
-          ...rest,
-          sizes: {
-            set: rest.sizes as Size[],
+      if (id) {
+        // Update
+        product = await prisma.product.update({
+          where: { id },
+          data: {
+            ...rest,
+            sizes: {
+              set: rest.sizes as Size[],
+            },
+            tags: {
+              set: tagsArray,
+            }
           },
-          tags: {
-            set: tagsArray,
-          }
-        },
-      });
+        });
 
-      console.log('Updated product:', product);
-    } else {
-      // Create
-      product = await prisma.product.create({
-        data: {
-          ...rest,
-          sizes: {
-            set: rest.sizes as Size[],
+        console.log('Updated product:', product);
+      } else {
+        // Create
+        product = await prisma.product.create({
+          data: {
+            ...rest,
+            sizes: {
+              set: rest.sizes as Size[],
+            },
+            tags: {
+              set: tagsArray,
+            }
           },
-          tags: {
-            set: tagsArray,
-          }
-        },
-      });
-    }
+        });
+      }
 
-    console.log('Created product:', product);
+      console.log('Created product:', product);
+
+      return {
+        product,
+      };
+    })
+
+    revalidatePath('/admin/products');
+    revalidatePath(`/admin/product/${product.slug}`);
+    revalidatePath(`/products/${product.slug}`);
 
     return {
-      product,
+      ok: true,
+      product: prismaTx.product,
     };
-  })
 
-  // TODO: Revalidate paths
+  } catch (error) {
+    console.error(error);
 
-  return {
-    ok: true,
+    return {
+      ok: false,
+      message: 'There was an error creating/updating the product. Please try again.'
+    };
   }
 };
